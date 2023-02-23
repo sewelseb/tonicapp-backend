@@ -81,6 +81,8 @@ class ApiRegistrationController extends AbstractController
             )
         );
 
+        //var_dump($user);
+
         $entityManager->persist($user);
         $entityManager->flush();
         return $user;
