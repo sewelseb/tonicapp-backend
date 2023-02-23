@@ -48,6 +48,7 @@ class ApiLoginController extends AbstractController
 
          $user->setApiToken($token);
          $entityManager->persist($user);
+         $entityManager->flush();
 
           return $this->json([
               'user'  => $user->getUserIdentifier(),
@@ -55,7 +56,8 @@ class ApiLoginController extends AbstractController
           ]);
     }
 
-    /**
+
+        /**
      * @param Request $request
      * @return mixed
      */

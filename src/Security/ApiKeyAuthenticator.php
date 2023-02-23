@@ -1,6 +1,7 @@
 <?php
 namespace App\Security;
 
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +15,11 @@ use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPasspor
 
 class ApiKeyAuthenticator extends AbstractAuthenticator
 {
+    private $userRepository;
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
     /**
      * Called on every request to decide if this authenticator should be
      * used for the request. Returning `false` will cause this authenticator
@@ -21,7 +27,7 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
      */
     public function supports(Request $request): ?bool
     {
-        return false;
+        // return false;
         return $request->headers->has('X-AUTH-TOKEN');
     }
 
@@ -34,7 +40,17 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
             throw new CustomUserMessageAuthenticationException('No API token provided');
         }
 
-        return new SelfValidatingPassport(new UserBadge($apiToken));
+        $user = $this->userRepository->findOneBy(['apiToken' => $apiToken]);
+
+        return new SelfValidatingPassport(new UserBadge($user->getEmail(), function (string $userIdentifier) {
+                return $this->userRepository->findOneBy(['email' => $userIdentifier]);
+            }),
+        );
+    }
+
+    public function getCredentials(Request $request)
+    {
+        return $request->headers->get('X-AUTH-TOKEN');
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
@@ -45,6 +61,7 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
+
         $data = [
             // you may want to customize or obfuscate the message first
             'message' => strtr($exception->getMessageKey(), $exception->getMessageData())
@@ -52,7 +69,6 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
             // or to translate this message
             // $this->translator->trans($exception->getMessageKey(), $exception->getMessageData())
         ];
-
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
     }
 }
