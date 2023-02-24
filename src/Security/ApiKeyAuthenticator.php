@@ -27,7 +27,6 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
      */
     public function supports(Request $request): ?bool
     {
-        // return false;
         return $request->headers->has('X-AUTH-TOKEN');
     }
 
@@ -41,6 +40,11 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
         }
 
         $user = $this->userRepository->findOneBy(['apiToken' => $apiToken]);
+
+        if (null === $user) {
+            // Code 401 "Unauthorized"
+            throw new CustomUserMessageAuthenticationException('No user');
+        }
 
         return new SelfValidatingPassport(new UserBadge($user->getEmail(), function (string $userIdentifier) {
                 return $this->userRepository->findOneBy(['email' => $userIdentifier]);
