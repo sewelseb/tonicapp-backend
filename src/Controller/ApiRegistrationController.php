@@ -31,7 +31,8 @@ class ApiRegistrationController extends AbstractController
             ]);
         } catch (\Exception $exception) {
             return new JsonResponse([
-                'error' => 'user creation error'
+                'error' => 'user creation error',
+                'exception' => $exception
             ], 500);
         }
     }
