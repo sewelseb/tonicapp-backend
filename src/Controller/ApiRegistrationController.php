@@ -30,9 +30,9 @@ class ApiRegistrationController extends AbstractController
                 'email'  => $user->getUserIdentifier()
             ]);
         } catch (\Exception $exception) {
+            var_dump($exception);
             return new JsonResponse([
                 'error' => 'user creation error',
-                'exception' => $exception
             ], 500);
         }
     }
