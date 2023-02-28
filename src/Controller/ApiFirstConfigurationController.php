@@ -24,14 +24,20 @@ class ApiFirstConfigurationController extends AbstractController
         $user->setCourseSubject($jsonData["courseSubject"]);
         $user->setTeacher($jsonData["teacher"]);
         $user->setIsRecievingComercialEmails($jsonData["isRecievingCommercialEmails"]);
-        //TODO: reactivate:
-        //$user->setFirstConnectionDone(true);
+        $user->setFirstConnectionDone(true);
 
         $entityManager->persist($user);
         $entityManager->flush();
 
         return $this->json([
             'Updated' => "Success"
+        ]);
+    }
+
+    #[Route('/api/protected/first-configuration', name: 'app_api_is_first_configuration_done', methods: ['GET'])]
+    public function isFirstConfigurationDone(): Response{
+        return $this->json([
+            'isFirstConfigurationDone' => $this->getUser()->getFirstConnectionDone()
         ]);
     }
 
