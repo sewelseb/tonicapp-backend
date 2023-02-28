@@ -75,4 +75,18 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
         ];
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
     }
+
+    public function getUser($credentials, UserProviderInterface $userProvider)
+    {
+        $apiKey = $credentials;
+
+        if (null === $apiKey) {
+            return;
+        }
+
+        // if a User object, checkCredentials() is called
+        return $userProvider->loadUserByUsername($apiKey);
+    }
+
+
 }

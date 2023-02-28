@@ -34,6 +34,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private $apiToken;
 
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    private $firstConnectionDone;
+
+    #[ORM\Column(nullable: true)]
+    private $teacher;
+
+    #[ORM\Column(nullable: true)]
+    private $courseSubject;
+
+    #[ORM\Column(type: 'boolean')]
+    private $isRecievingComercialEmails = false;
+
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
@@ -130,4 +142,71 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getFirstConnectionDone()
+    {
+        return $this->firstConnectionDone;
+    }
+
+    /**
+     * @param mixed $firstConnectionDone
+     */
+    public function setFirstConnectionDone($firstConnectionDone): void
+    {
+        $this->firstConnectionDone = $firstConnectionDone;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTeacher()
+    {
+        return $this->teacher;
+    }
+
+    /**
+     * @param mixed $teacher
+     */
+    public function setTeacher($teacher): void
+    {
+        $this->teacher = $teacher;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCourseSubject()
+    {
+        return $this->courseSubject;
+    }
+
+    /**
+     * @param mixed $courseSubject
+     */
+    public function setCourseSubject($courseSubject): void
+    {
+        $this->courseSubject = $courseSubject;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRecievingComercialEmails(): bool
+    {
+        return $this->isRecievingComercialEmails;
+    }
+
+    /**
+     * @param bool $isRecievingComercialEmails
+     */
+    public function setIsRecievingComercialEmails(bool $isRecievingComercialEmails): void
+    {
+        $this->isRecievingComercialEmails = $isRecievingComercialEmails;
+    }
+
+
+
 }
