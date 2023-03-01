@@ -27,7 +27,8 @@ class ApiRegistrationController extends AbstractController
             $user = $this->createUser($credentials, $userPasswordHasher, $entityManager);
 
             return $this->json([
-                'email'  => $user->getUserIdentifier()
+                'email'  => $user->getUserIdentifier(),
+                'token' => $user->getApiToken()
             ]);
         } catch (\Exception $exception) {
             return new JsonResponse([
@@ -85,6 +86,12 @@ class ApiRegistrationController extends AbstractController
 
         $entityManager->persist($user);
         $entityManager->flush();
+
+        $token = sha1(rand());
+        $user->setApiToken($token);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
         return $user;
     }
 }
