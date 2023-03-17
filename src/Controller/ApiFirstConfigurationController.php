@@ -23,6 +23,7 @@ class ApiFirstConfigurationController extends AbstractController
 
         $user->setCourseSubject($jsonData["courseSubject"]);
         $user->setTeacher($jsonData["teacher"]);
+        $user->setSchool($jsonData["school"]);
         $user->setIsRecievingComercialEmails($jsonData["isRecievingCommercialEmails"]);
         $user->setFirstConnectionDone(true);
 

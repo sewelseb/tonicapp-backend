@@ -43,6 +43,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private $courseSubject;
 
+    #[ORM\Column(nullable: true)]
+    private $school;
+
     #[ORM\Column(type: 'boolean')]
     private $isRecievingComercialEmails = false;
 
@@ -205,6 +208,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsRecievingComercialEmails(bool $isRecievingComercialEmails): void
     {
         $this->isRecievingComercialEmails = $isRecievingComercialEmails;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSchool()
+    {
+        return $this->school;
+    }
+
+    /**
+     * @param mixed $school
+     */
+    public function setSchool($school): void
+    {
+        $this->school = $school;
     }
 
 
